@@ -1,0 +1,192 @@
+﻿@model Models.ViewModels.VehicleRegistration.Core.VwApplication
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <style>
+        .heading {
+            font-family: Courier New,serif;
+            font-size: 10.1px;
+            color: rgb(0,0,0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        table {
+            font-family: Courier New,serif;
+            font-size: 10.1px;
+            color: rgb(0,0,0);
+            font-style: normal;
+            text-decoration: none;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            table-layout: fixed;
+        }
+
+        table.table-taxlist {
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        span.cls_008 {
+            font-family: Courier New,serif;
+            font-size: 9.1px;
+            color: rgb(0,0,0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: underline;
+        }
+
+        div.cls_008 {
+            font-family: Courier New,serif;
+            font-size: 9.1px;
+            color: rgb(0,0,0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        span.cls_004 {
+            font-family: Courier New,serif;
+            font-size: 11.1px;
+            color: rgb(0,0,0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+        }
+
+        div.cls_004 {
+            font-family: Courier New,serif;
+            font-size: 11.1px;
+            color: rgb(0,0,0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tbody>
+            <tr class="heading"><td colspan="4">Dues Payment Receipt, Excise & Taxation Department,Lahore</td></tr>
+            <tr>
+                @{
+                    var challan = Model.ChallanPayments.OrderBy(x => x.AssessmentBaseId).LastOrDefault();
+                }
+                <td>Challan No:</td><td>@challan.ChallanId</td>
+                <td>Status:</td><td>@challan.ChallanStatus</td>
+            </tr>
+            <tr>
+                <td>Registration No.:</td><td>@Model.Vehicle.RegistrationNo</td>
+                <td>Application ID:</td><td>@Model.ApplicationId</td>
+            </tr>
+            <tr>
+                <td>Chassis No.:</td><td>@Model.Vehicle.ChasisNo</td>
+                <td>Engine No.:</td><td>@Model.Vehicle.EngineNo</td>
+            </tr>
+            <tr>
+                <td>Payment From:</td><td>@Model.Vehicle.PurchaseDate</td>
+                <td>Payment Upto:</td><td>@Model.Vehicle.TaxPaidUpto</td>
+            </tr>
+            <tr>
+                <td>Seating Capacity:</td><td>@Model.Vehicle.SeatingCapacity</td>
+                <td>Price:</td><td>@Model.Vehicle.Price</td>
+            </tr>
+            <tr>
+                <td>Engine Size:</td><td>@Model.Vehicle.EngineSize</td>
+                <td>Purchase Date:</td><td>@Model.Vehicle.PurchaseDate</td>
+            </tr>
+            <tr>
+                <td>Maker:</td><td>@Model.Vehicle.VehicleMaker</td>
+                <td>Make:</td><td>@Model.Vehicle.VehicleMake</td>
+            </tr>
+            <tr>
+                <td>Color:</td><td>@Model.Vehicle.VehicleColor</td>
+                <td>Payment Date:</td><td></td>
+            </tr>
+            <tr>
+                @{
+                    string ownerName = string.Empty;
+                    string fatherName = string.Empty;
+                    string address = string.Empty;
+
+                    if (Model.Owner.OwnerTypeId == 1)
+                    {
+                        var person = Model.Owner.Persons.FirstOrDefault();
+                        ownerName = $"{ person.PersonName} {person.CNIC}";
+                        fatherName = $"{ person.FatherHusbandName}";
+                        address = $"{ person.Addresses.FirstOrDefault().AddressDescription }";
+                    }
+                    else if (Model.Owner.OwnerTypeId == 2)
+                    {
+                        var business = Model.Owner.Business;
+                        ownerName = $"{ business.BusinessName} {business.NTN}";
+                        address = $"{ business.Addresses}";
+                    }
+                }
+                <td>Name:</td><td colspan="3">@ownerName</td>
+            </tr>
+            <tr>
+                <td>Father Name:</td><td colspan="3">@fatherName</td>
+            </tr>
+            <tr>
+                <td>Address:</td><td colspan="3">@address</td>
+            </tr>
+            <tr>
+                <td>Class:</td><td colspan="3">@Model.Vehicle.VehicleClass</td>
+            </tr>
+            <tr>
+                <td>HPA:</td><td colspan="3"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table-taxlist">
+        <tr>
+            <td>Description</td>
+            <td style="float:right;">Amount</td>
+        </tr>
+        @{
+            foreach (var tax in challan.TaxAssessment)
+            {
+                <tr>
+                    <td>@tax.TaxType</td>
+                    <td style="float:right;">@tax.PayableAmount</td>
+                </tr>
+            }
+
+                <tr>
+                    <td>Total</td>
+                    <td style="float:right;">@challan.TaxAssessment.Sum(x => x.PayableAmount)</td>
+                </tr>
+        }
+    </table>
+    <table>
+        <tr>
+            <td>Received By:</td><td></td>
+            <td rowspan="2">Motor Registration Authority, Excise And Taxation Department,Lahore</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Print Date:</td><td>@DateTime.Now.ToShortDateString()</td>
+            <td></td>
+        </tr>
+    </table>
+    <div class="cls_008"><span class="cls_008">For Verification of Vehicle Particulars and Payments, Please SMS Registration No. to 8785</span></div>
+    <div class="cls_004"><span class="cls_004">NOTE: BIOMETRIC VERIFICATION IS MANDATORY FOR COMPLETION OF TRANSACTION</span></div>
+</body>
+</html>

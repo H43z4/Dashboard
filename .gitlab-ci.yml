@@ -11,13 +11,13 @@ build_image:
   stage: build
 
   tags:
-    - mvrs-revamp-biometric
+    - mvrs-revamp-reports
 
   script:
     - echo "Compiling the code..."
     - git submodule sync --recursive
     - git submodule update --init --recursive
-    - docker build -t mvrs-revamp-biometric .
+    - docker build -t mvrs-revamp-reports .
     - echo "Compile complete."
 
     - echo "List all images..."

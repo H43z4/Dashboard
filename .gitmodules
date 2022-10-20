@@ -1,0 +1,4 @@
+[submodule "mvrs-revamp-sharedfeatures"]
+	path = mvrs-revamp-sharedfeatures
+	url = ../mvrs-revamp-sharedfeatures.git
+	branch = master

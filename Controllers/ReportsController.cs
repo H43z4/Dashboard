@@ -1,22 +1,17 @@
-﻿using Authentication.Schemes;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Models.ViewModels.Identity;
+using Models.ViewModels.Payment;
 using Models.ViewModels.VehicleRegistration.Core;
 using SharedLib.Common;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using VehicleRegistration;
+using SharedLib.APIs;
+using System.Data;
+using SharedLib.Security;
+using Reports.Services;
 using Wkhtmltopdf.NetCore;
 using Wkhtmltopdf.NetCore.Interfaces;
-using Models.ViewModels.Payment;
-using Payment;
-using System.Data;
-using System;
 
-namespace APIGateway.Controllers.Reports
+namespace Reports.Controllers.Reports
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
