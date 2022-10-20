@@ -1,0 +1,29 @@
+before_script:
+  - echo "Getting docker info..."
+  - docker info
+  - echo "Obtained docker info..."
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+
+build_image:
+  
+  stage: build
+
+  tags:
+    - mvrs-revamp-biometric
+
+  script:
+    - echo "Compiling the code..."
+    - git submodule sync --recursive
+    - git submodule update --init --recursive
+    - docker build -t mvrs-revamp-biometric .
+    - echo "Compile complete."
+
+    - echo "List all images..."
+    - docker images -a
+    - echo "List of available images shown above..."
+
+    - echo "List all containers..."
+    - docker ps -a
+    - echo "List of available containers shown above..."   
