@@ -39,4 +39,10 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Update="Rotativa\Linux\wkhtmltopdf.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
 </Project>
