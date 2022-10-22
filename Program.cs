@@ -64,6 +64,10 @@ app.Use(async (context, next) =>
     }
     catch (Exception ex)
     {
+        Console.WriteLine("\n--------------Reports Program--------------\n");
+
+        Console.Write(ex);
+
         while (ex.InnerException != null)
         {
             ex = ex.InnerException;

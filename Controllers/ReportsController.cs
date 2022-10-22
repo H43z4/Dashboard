@@ -388,8 +388,11 @@ namespace Reports.Controllers.Reports
 
                 return file;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine("\n--------------GenerateChallan--------------\n");
+                Console.Write(ex);
+
                 return await this.GenerateBlankPDF(applicationId.ToString());
             }
         }
