@@ -70,6 +70,11 @@ app.Use(async (context, next) =>
 
         while (ex.InnerException != null)
         {
+            if (string.IsNullOrEmpty(ex.InnerException.Message))
+            {
+                break;
+            }
+            
             ex = ex.InnerException;
         }
 

@@ -18,4 +18,5 @@ RUN dotnet publish "Reports.csproj" -c Release -o /app/publish /p:UseAppHost=fal
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN chmod 755 /app/Rotativa/Linux/wkhtmltopdf
 ENTRYPOINT ["dotnet", "Reports.dll"]
