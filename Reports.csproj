@@ -38,21 +38,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Rotativa\" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Update="Views\Reports\GetChallan.cshtml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Update="Rotativa\Windows\wkhtmltopdf.exe">
+		<None Update="Rotativa\Windows\wkhtmltopdf.exe">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
+		</None>
 	</ItemGroup>
-
-	<ItemGroup>
-		<Content Update="Rotativa\Linux\wkhtmltopdf.exe">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
 </Project>
