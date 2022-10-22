@@ -6,7 +6,6 @@ using SharedLib.APIs;
 using SharedLib.Interfaces;
 using System.Net;
 using Reports.Services;
-using Models.DatabaseModels.SeriesNumberPool;
 using Wkhtmltopdf.NetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +22,9 @@ builder.Services.AddStatelessTokenAuthentication();
 builder.Services.AddTransient<IRegistrationService, RegistrationService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services
+    .AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
+    .AddNewtonsoftJson();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
