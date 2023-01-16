@@ -9,6 +9,7 @@ namespace Reports.Services
     public interface IPaymentService : ICurrentUser
     {
         Task<DataSet> GenerateChallan(long applicationId);
+        Task<DataSet> GenerateChallan(long businessProcessId, long applicationId, long assessmentBaseId);
         Task<DataSet> GetPayeeInfo(long applicationId);
         Task<VwPayeeInfo> GetPSId(VwPayeeInfo payeeInfo);
         Task<DataSet> SavePSId(VwPayeeInfo payeeInfo);
@@ -32,6 +33,19 @@ namespace Reports.Services
             paramDict.Add("@UserId", this.VwUser.UserId);
 
             var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Payments].[GenerateChallan]", paramDict);
+
+            return ds;
+        }
+
+        public async Task<DataSet> GenerateChallan(long businessProcessId, long applicationId, long assessmentBaseId)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+            paramDict.Add("@BusinessProcessId", businessProcessId);
+            paramDict.Add("@ApplicationId", applicationId);
+            paramDict.Add("@AssessmentBaseId", assessmentBaseId);
+            paramDict.Add("@UserId", this.VwUser.UserId);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Common].[GenerateChallan]", paramDict);
 
             return ds;
         }

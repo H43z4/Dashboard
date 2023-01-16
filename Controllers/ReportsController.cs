@@ -337,8 +337,68 @@ namespace Reports.Controllers.Reports
             return file;
         }
 
+        //[HttpGet(Name = "GenerateChallan")]
+        //public async Task<FileResult> GenerateChallan(long applicationId)
+        //{
+        //    try
+        //    {
+        //        this.registrationService.VwUser = this.User;
+        //        this.paymentService.VwUser = this.User;
+
+        //        //var application = new VwApplication();
+
+        //        var dsChallan = await this.paymentService.GenerateChallan(applicationId);
+
+        //        if (dsChallan.Tables.Count == 0)
+        //        {
+        //            throw new DataException();
+        //        }
+
+        //        int STATUS_TABLE_INDEX = dsChallan.Tables.Count - 1;
+
+        //        if (Convert.ToInt16(dsChallan.Tables[STATUS_TABLE_INDEX].Rows[0][0]) == 0)  //Challan generated.
+        //        {
+        //            var dsPayeeInfo = await this.paymentService.GetPayeeInfo(applicationId);
+
+        //            var payeeInfo = dsPayeeInfo.Tables[0].ToList<VwPayeeInfo>().FirstOrDefault();
+
+        //            //GetPSId
+
+        //            payeeInfo = await this.paymentService.GetPSId(payeeInfo);
+
+        //            //SavePSId
+
+        //            if (payeeInfo is null)
+        //            {
+        //                throw new DataException();
+        //            }
+
+        //            await this.paymentService.SavePSId(payeeInfo);
+        //        }
+
+        //        //var dsApplication = await this.registrationService.GetApplicationDetails(applicationId);
+        //        //var application = this.GetApplicationDetails(dsApplication, 0);
+
+        //        var dsApplication = await this.registrationService.GetChallanDetail(applicationId);
+        //        var application = this.GetChallanDetail(dsApplication);
+
+
+        //        var viewPath = "Reports/GetChallan";
+        //        var file = await GeneratePDF(viewPath, application, $"{applicationId}-challan.pdf");
+
+        //        return file;
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Console.WriteLine("\n--------------GenerateChallan--------------\n");
+        //        Console.Write(ex);
+
+        //        return await this.GenerateBlankPDF(applicationId.ToString());
+        //    }
+        //}
+        
         [HttpGet(Name = "GenerateChallan")]
-        public async Task<FileResult> GenerateChallan(long applicationId)
+        public async Task<FileResult> GenerateChallan(long businessProcessId, long applicationId, long assessmentBaseId)
         {
             try
             {
@@ -347,7 +407,7 @@ namespace Reports.Controllers.Reports
 
                 //var application = new VwApplication();
 
-                var dsChallan = await this.paymentService.GenerateChallan(applicationId);
+                var dsChallan = await this.paymentService.GenerateChallan(businessProcessId, applicationId, assessmentBaseId);
 
                 if (dsChallan.Tables.Count == 0)
                 {
