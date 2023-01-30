@@ -418,22 +418,32 @@ namespace Reports.Controllers.Reports
 
                 if (Convert.ToInt16(dsChallan.Tables[STATUS_TABLE_INDEX].Rows[0][0]) == 0)  //Challan generated.
                 {
-                    var dsPayeeInfo = await this.paymentService.GetPayeeInfo(applicationId);
+                    //var dsPayeeInfo = await this.paymentService.GetPayeeInfo(applicationId);
 
-                    var payeeInfo = dsPayeeInfo.Tables[0].ToList<VwPayeeInfo>().FirstOrDefault();
+                    //var payeeInfo = dsPayeeInfo.Tables[0].ToList<VwPayeeInfo>().FirstOrDefault();
 
-                    //GetPSId
+                    ////GetPSId
 
-                    payeeInfo = await this.paymentService.GetPSId(payeeInfo);
+                    //payeeInfo = await this.paymentService.GetPSId(payeeInfo);
 
-                    //SavePSId
+                    ////SavePSId
 
-                    if (payeeInfo is null)
+                    //if (payeeInfo is null)
+                    //{
+                    //    throw new DataException();
+                    //}
+
+                    //await this.paymentService.SavePSId(payeeInfo);
+                    
+                    var challanId = Convert.ToInt64(dsChallan.Tables[0].Rows[0][1]);
+
+                    var dsEPayTask = await this.paymentService.SaveEPayTask(businessProcessId, applicationId, challanId);
+                    
+                    if (Convert.ToInt16(dsEPayTask.Tables[0].Rows[0][0]) == 0)  //epay task generated
                     {
-                        throw new DataException();
+                        var epayTaskId = Convert.ToInt64(dsEPayTask.Tables[0].Rows[0][1]);
+                        await EPayHttpClient.GeneratePSIDRequest(epayTaskId);
                     }
-
-                    await this.paymentService.SavePSId(payeeInfo);
                 }
 
                 //var dsApplication = await this.registrationService.GetApplicationDetails(applicationId);

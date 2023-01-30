@@ -21,6 +21,7 @@ builder.Services.AddStatelessTokenAuthentication();
 
 builder.Services.AddTransient<IRegistrationService, RegistrationService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
+builder.Services.AddSingleton<EPayHttpClient>();
 
 builder.Services
     .AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)

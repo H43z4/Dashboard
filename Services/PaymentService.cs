@@ -3,6 +3,7 @@ using Database;
 using SharedLib.Interfaces;
 using System.Data;
 using Models.ViewModels.Payment;
+using Models.DatabaseModels.VehicleRegistration.Core;
 
 namespace Reports.Services
 {
@@ -13,6 +14,7 @@ namespace Reports.Services
         Task<DataSet> GetPayeeInfo(long applicationId);
         Task<VwPayeeInfo> GetPSId(VwPayeeInfo payeeInfo);
         Task<DataSet> SavePSId(VwPayeeInfo payeeInfo);
+        Task<DataSet> SaveEPayTask(long businessProcessId, long applicationId, long challanId);
         Task<DataSet> SavePaymentIntimation(VwPayeeIntimation payeeIntimation);
     }
 
@@ -75,6 +77,19 @@ namespace Reports.Services
             paramDict.Add("@UserId", this.VwUser.UserId);
 
             var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Payments].[SavePSId]", paramDict);
+
+            return ds;
+        }
+
+        public async Task<DataSet> SaveEPayTask(long businessProcessId, long applicationId, long challanId)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+            paramDict.Add("@BusinessProcessId", businessProcessId);
+            paramDict.Add("@ApplicationId", applicationId);
+            paramDict.Add("@ChallanId", challanId);
+            paramDict.Add("@UserId", this.VwUser.UserId);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Payments].[SaveEPayTask]", paramDict);
 
             return ds;
         }
