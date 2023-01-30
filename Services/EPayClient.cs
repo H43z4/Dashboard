@@ -13,7 +13,7 @@
         {
             try
             {
-                var httpResponseMessage = await httpClient.GetAsync($"http://localhost:6060/api/payments/EnqueueEpayTask?epayTaskId={epayTaskId}");
+                var httpResponseMessage = await httpClient.GetAsync($"http://10.50.126.65:6060/api/payments/EnqueueEpayTask?epayTaskId={epayTaskId}");
             }
             catch
             {
