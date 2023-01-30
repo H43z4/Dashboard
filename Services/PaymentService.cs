@@ -89,7 +89,7 @@ namespace Reports.Services
             paramDict.Add("@ChallanId", challanId);
             paramDict.Add("@UserId", this.VwUser.UserId);
 
-            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Payments].[SaveEPayTask]", paramDict);
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[epay].[SaveEPayTask]", paramDict);
 
             return ds;
         }

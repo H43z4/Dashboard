@@ -435,13 +435,13 @@ namespace Reports.Controllers.Reports
 
                     //await this.paymentService.SavePSId(payeeInfo);
                     
-                    var challanId = Convert.ToInt64(dsChallan.Tables[0].Rows[0][1]);
+                    var challanId = Convert.ToInt64(dsChallan.Tables[0].Rows[0][2]);
 
                     var dsEPayTask = await this.paymentService.SaveEPayTask(businessProcessId, applicationId, challanId);
                     
                     if (Convert.ToInt16(dsEPayTask.Tables[0].Rows[0][0]) == 0)  //epay task generated
                     {
-                        var epayTaskId = Convert.ToInt64(dsEPayTask.Tables[0].Rows[0][1]);
+                        var epayTaskId = Convert.ToInt64(dsEPayTask.Tables[0].Rows[0][2]);
                         await EPayHttpClient.GeneratePSIDRequest(epayTaskId);
                     }
                 }

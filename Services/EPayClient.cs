@@ -11,15 +11,12 @@
 
         public static async Task<bool> GeneratePSIDRequest(long epayTaskId)
         {
-            //await httpClient.SendAsync(new HttpRequestMessage("GET", $"http://localhost:6060/api/payments/EnqueueEpayTask?epayTaskId={epayTaskId}");
             try
             {
                 var httpResponseMessage = await httpClient.GetAsync($"http://localhost:6060/api/payments/EnqueueEpayTask?epayTaskId={epayTaskId}");
             }
-            catch (Exception ex)
+            catch
             {
-                var exc = ex;
-
                 return false;
             }
 
