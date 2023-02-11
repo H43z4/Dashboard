@@ -7,6 +7,7 @@ using SharedLib.Interfaces;
 using System.Net;
 using Reports.Services;
 using Wkhtmltopdf.NetCore;
+using Inquiry.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddStatelessTokenAuthentication();
 
 builder.Services.AddTransient<IRegistrationService, RegistrationService>();
+builder.Services.AddTransient<IInquiryService, InquiryService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddSingleton<EPayHttpClient>();
 
