@@ -83,7 +83,7 @@
 <body>
     <table>
         <tbody>
-            <tr class="heading"><td colspan="4">Dues Payment Receipt, Excise & Taxation Department,Lahore</td></tr>
+            <tr class="heading"><td colspan="4">Assessment for Payment, Excise & Taxation Department,Lahore</td></tr>
             <tr>
                 @{
                     var challan = Model.ChallanPayments.OrderBy(x => x.AssessmentBaseId).LastOrDefault();
@@ -100,8 +100,10 @@
                 <td>Engine No.:</td><td>@Model.Vehicle.EngineNo</td>
             </tr>
             <tr>
-                <td>Payment From:</td><td>@Model.Vehicle.PurchaseDate</td>
-                <td>Payment Upto:</td><td>@Model.Vehicle.TaxPaidUpto</td>
+                <td>Payment From:</td>
+                <td>@Model.Vehicle.PurchaseDate.Value.ToString("dd-MM-yyyy")</td>
+                <td>Payment Upto:</td>
+                <td>@Model.Vehicle.TaxPaidUpto.Value.ToString("dd-MM-yyyy")</td>
             </tr>
             <tr>
                 <td>Seating Capacity:</td><td>@Model.Vehicle.SeatingCapacity</td>
@@ -109,7 +111,8 @@
             </tr>
             <tr>
                 <td>Engine Size:</td><td>@Model.Vehicle.EngineSize</td>
-                <td>Purchase Date:</td><td>@Model.Vehicle.PurchaseDate</td>
+                <td>Purchase Date:</td>
+                <td>@Model.Vehicle.PurchaseDate.Value.ToString("dd-MM-yyyy")</td>
             </tr>
             <tr>
                 <td>Maker:</td><td>@Model.Vehicle.VehicleMaker</td>
@@ -117,7 +120,7 @@
             </tr>
             <tr>
                 <td>Color:</td><td>@Model.Vehicle.VehicleColor</td>
-                <td>Payment Date:</td><td></td>
+                <td>Application Date:</td><td>@Model.ReceivedAt.ToString("dd-MM-yyyy")</td>
             </tr>
             <tr>
                 @{
@@ -161,11 +164,11 @@
             <td style="float:right;">Amount</td>
         </tr>
         @{
-            foreach (var tax in challan.TaxAssessment)
+            foreach (var tax in challan.TaxAssessment.OrderByDescending(x => x.PayableAmount))
             {
                 <tr>
                     <td>@tax.TaxType</td>
-                    <td style="float:right;">@tax.PayableAmount</td>
+                    <td style="float:right;">@tax.PayableAmount.ToString("N0")</td>
                 </tr>
             }
 
@@ -175,7 +178,7 @@
                 </tr>
         }
     </table>
-    <table>
+    @*<table>
         <tr>
             <td>Received By:</td><td></td>
             <td rowspan="2">Motor Registration Authority, Excise And Taxation Department,Lahore</td>
@@ -185,7 +188,7 @@
             <td>Print Date:</td><td>@DateTime.Now.ToShortDateString()</td>
             <td></td>
         </tr>
-    </table>
+    </table>*@
     <div class="cls_008"><span class="cls_008">For Verification of Vehicle Particulars and Payments, Please SMS Registration No. to 8785</span></div>
     <div class="cls_004"><span class="cls_004">NOTE: BIOMETRIC VERIFICATION IS MANDATORY FOR COMPLETION OF TRANSACTION</span></div>
 </body>
