@@ -160,8 +160,8 @@
     </table>
     <table class="table-taxlist">
         <tr>
-            <td>Description</td>
-            <td style="float:right;">Amount</td>
+            <td><strong>Description</strong></td>
+            <td style="float:right;"><strong>Amount (Rs.)</strong></td>
         </tr>
         @{
             foreach (var tax in challan.TaxAssessment.OrderByDescending(x => x.PayableAmount))
@@ -174,7 +174,7 @@
 
                 <tr>
                     <td>Total</td>
-                    <td style="float:right;">@challan.TaxAssessment.Sum(x => x.PayableAmount)</td>
+                <td style="float:right;">@challan.TaxAssessment.Sum(x => x.PayableAmount).ToString("N0")</td>
                 </tr>
         }
     </table>
