@@ -16,6 +16,8 @@ namespace Inquiry.Services
         Task<DataSet> GetApplicationsAgainstRegNo(string registrationNo);
         Task<DataSet> GetApplicationsLogsListAgainstRegNo(long appId);
         Task<DataSet> GetPrintingAgainstRegNo(string registrationNo);
+        Task<DataSet> GetStatusHistoryAgainstRegNo(string registrationNo);
+        Task<DataSet> GetVHLRemarksAgainstRegNo(string registrationNo);
     }
     public class InquiryService:IInquiryService
     {
@@ -115,6 +117,26 @@ namespace Inquiry.Services
             var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetPrintingAgainstVehicle]", paramDict);
 
             return ds;
-        }        
+        }
+        public async Task<DataSet> GetStatusHistoryAgainstRegNo(string registrationNo)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+
+            paramDict.Add("@VehicleRegNo", registrationNo);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetStatusHistoryAgainstVehicle]", paramDict);
+
+            return ds;
+        }
+        public async Task<DataSet> GetVHLRemarksAgainstRegNo(string registrationNo)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+
+            paramDict.Add("@VehicleRegNo", registrationNo);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetVHLRemarksAgainstVehicle]", paramDict);
+
+            return ds;
+        }
     }
 }

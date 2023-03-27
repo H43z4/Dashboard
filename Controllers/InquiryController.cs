@@ -192,5 +192,43 @@ namespace Reports.Controllers
 
             return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, ownershipHistory, Constants.RECORD_FOUND_MESSAGE);
         }
+
+        [HttpGet(Name = "GetStatusHistoryAgainstRegNo")]
+        public async Task<ApiResponse> GetStatusHistoryAgainstRegNo(string registrationNo)
+        {
+            this._service.VwUser = this.User;
+
+            var ds = await this._service.GetStatusHistoryAgainstRegNo(registrationNo);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var data = new {
+                applicationsList = ds.Tables[0]
+            };
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, data, Constants.RECORD_FOUND_MESSAGE);
+        }
+        [HttpGet(Name = "GetVHLRemarksAgainstRegNo")]
+        public async Task<ApiResponse> GetVHLRemarksAgainstRegNo(string registrationNo)
+        {
+            this._service.VwUser = this.User;
+
+            var ds = await this._service.GetVHLRemarksAgainstRegNo(registrationNo);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var data = new
+            {
+                VHLRemarksList = ds.Tables[0]
+            };
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, data, Constants.RECORD_FOUND_MESSAGE);
+        }
     }
 }
