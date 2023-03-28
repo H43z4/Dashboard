@@ -445,9 +445,7 @@ namespace Reports.Controllers.Reports
             }
         }
 
-
         [HttpPost(Name = "UpdatePSIDStatus")]
-
         public async Task<ApiResponse> UpdatePSIDStatus(long epayTaskId, long status)
         {
             this.paymentService.VwUser = this.User;
@@ -467,30 +465,6 @@ namespace Reports.Controllers.Reports
             }
 
             return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, null, Constants.DATA_SAVED_MESSAGE);
-        }
-
-        [HttpPost]
-        public async Task<ApiResponse> SavePaymentIntimation(VwPayeeIntimation vwPayeeIntimation)
-        {
-            this.paymentService.VwUser = this.User;
-
-            var ds = await this.paymentService.SavePaymentIntimation(vwPayeeIntimation);
-
-            var apiResponseType = ApiResponseType.SUCCESS;
-            var msg = Constants.DATA_SAVED_MESSAGE;
-
-            if (ds.Tables[0].Rows[0][0].ToString() == "0")
-            {
-                apiResponseType = ApiResponseType.SUCCESS;
-                msg = Constants.DATA_SAVED_MESSAGE;
-            }
-            else
-            {
-                apiResponseType = ApiResponseType.FAILED;
-                msg = Constants.DATA_NOT_SAVED_MESSAGE;
-            }
-
-            return ApiResponse.GetApiResponse(apiResponseType, null, msg);
         }
 
         [HttpGet(Name = "GetChallanApplications")]
