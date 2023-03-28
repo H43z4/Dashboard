@@ -15,7 +15,9 @@ namespace Reports.Services
         Task<VwPayeeInfo> GetPSId(VwPayeeInfo payeeInfo);
         Task<DataSet> SavePSId(VwPayeeInfo payeeInfo);
         Task<DataSet> SaveEPayTask(long businessProcessId, long applicationId, long challanId);
-        Task<DataSet> SavePaymentIntimation(VwPayeeIntimation payeeIntimation);
+        Task<DataSet> GetChallanApplications(long id, DateTime? _appDate);
+        Task<DataSet> GetPSIDStatusDropDown();
+        Task<DataSet> UpdatePsidStatus(long epayTaskId, long statusId);
     }
 
     public class PaymentService : IPaymentService
@@ -94,25 +96,37 @@ namespace Reports.Services
             return ds;
         }
 
-        public async Task<DataSet> SavePaymentIntimation(VwPayeeIntimation payeeIntimation)
+        public async Task<DataSet> GetChallanApplications(long id, DateTime? _appDate)
         {
             Dictionary<string, object> paramDict = new Dictionary<string, object>();
-            paramDict.Add("@ChallanId", payeeIntimation.ChallanId);
-            paramDict.Add("@PSId", payeeIntimation.PSId);
-            paramDict.Add("@AmountPaid", payeeIntimation.AmountPaid);
-            paramDict.Add("@PaidOn", payeeIntimation.PaidOn);
-            paramDict.Add("@BankCode", payeeIntimation.BankCode);
-            paramDict.Add("@UserId", this.VwUser.UserId);
+            string x = _appDate?.Date.ToString("yyyy-MM-dd");
+            paramDict.Add("@PSIDStatus", id);
+            paramDict.Add("@CreatedAt", _appDate);
+            paramDict.Add("@CreatedBy", this.VwUser.UserId);
 
-            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Payments].[SavePaymentIntimation]", paramDict);
-
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[epay].[GetChallanApplications]", paramDict);
             return ds;
         }
 
-        //public async Task<ApiResponse> GetApplicationDetails(PayeeInfo payeeInfo)
-        //{
-        //    return ApiResponse.GetApiResponse(apiResponseType, taxesApplied, msg);
-        //}
+        public async Task<DataSet> GetPSIDStatusDropDown()
+        {
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[epay].[GetPSIDStatus]", null);
+            return ds;
+        }
+
+        public async Task<DataSet> UpdatePsidStatus(long epayTaskId, long statusId)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+            paramDict.Add("@UserId", this.VwUser.UserId);
+            paramDict.Add("@EpayTaskId", epayTaskId);
+            paramDict.Add("@statusId", statusId);
+
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[epay].[UpdatePSIDStatus]", paramDict);
+
+            return ds;
+
+        }
 
     }
 }
