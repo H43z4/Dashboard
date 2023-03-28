@@ -20,7 +20,7 @@ builder.Services.AddTransient<IDBHelper>(x => new DBHelper(builder.Configuration
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddStatelessTokenAuthentication();
 
-builder.Services.AddTransient<IRegistrationService, RegistrationService>();
+builder.Services.AddTransient<IReportsService, ReportsService>();
 builder.Services.AddTransient<IInquiryService, InquiryService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddSingleton<EPayHttpClient>();

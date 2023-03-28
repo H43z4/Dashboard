@@ -19,7 +19,7 @@ namespace Reports.Controllers.Reports
 
     public class ReportsController : ControllerBase
     {
-        private readonly IRegistrationService registrationService;
+        private readonly IReportsService reportsService;
         private readonly IPaymentService paymentService;
 
         private readonly IGeneratePdf _generatePdf;
@@ -34,12 +34,12 @@ namespace Reports.Controllers.Reports
             }
         }
 
-        public ReportsController(IRegistrationService registrationService,
+        public ReportsController(IReportsService reportsService,
             IPaymentService paymentService,
             IGeneratePdf generatePdf,
             IRazorViewToStringRenderer engine)
         {
-            this.registrationService = registrationService;
+            this.reportsService = reportsService;
             this.paymentService = paymentService;
 
             _generatePdf = generatePdf;
@@ -75,9 +75,9 @@ namespace Reports.Controllers.Reports
 
         private async Task<VwApplication> GetApplicationDetails(long applicationId)
         {
-            this.registrationService.VwUser = this.User;
+            this.reportsService.VwUser = this.User;
 
-            var ds = await this.registrationService.GetApplicationDetails(applicationId);
+            var ds = await this.reportsService.GetApplicationDetails(applicationId);
 
             VwApplication currentApp = SharedLib.Common.Extentions.ToList<VwApplication>(ds.Tables[0]).FirstOrDefault();
 
@@ -325,9 +325,9 @@ namespace Reports.Controllers.Reports
 
             if (file is not null)
             {
-                this.registrationService.VwUser = this.User;
+                this.reportsService.VwUser = this.User;
 
-                var ds = await this.registrationService.SaveApplicationPhase(new VwApplicationPhaseChange()
+                var ds = await this.reportsService.SaveApplicationPhase(new VwApplicationPhaseChange()
                 {
                     ApplicationId = application.ApplicationId,
                     BusinessEventId = 1,
@@ -402,7 +402,7 @@ namespace Reports.Controllers.Reports
         {
             try
             {
-                this.registrationService.VwUser = this.User;
+                this.reportsService.VwUser = this.User;
                 this.paymentService.VwUser = this.User;
 
                 var dsChallan = await this.paymentService.GenerateChallan(businessProcessId, applicationId, assessmentBaseId);
@@ -427,7 +427,7 @@ namespace Reports.Controllers.Reports
                     }
                 }
 
-                var dsApplication = await this.registrationService.GetChallanDetail(applicationId);
+                var dsApplication = await this.reportsService.GetChallanDetail(applicationId);
                 var application = this.GetChallanDetail(dsApplication);
 
 
@@ -443,33 +443,6 @@ namespace Reports.Controllers.Reports
 
                 return await this.GenerateBlankPDF(applicationId.ToString());
             }
-        }
-
-
-
-
-        [HttpPost]
-        public async Task<ApiResponse> SavePaymentIntimation(VwPayeeIntimation vwPayeeIntimation)
-        {
-            this.paymentService.VwUser = this.User;
-
-            var ds = await this.paymentService.SavePaymentIntimation(vwPayeeIntimation);
-
-            var apiResponseType = ApiResponseType.SUCCESS;
-            var msg = Constants.DATA_SAVED_MESSAGE;
-
-            if (ds.Tables[0].Rows[0][0].ToString() == "0")
-            {
-                apiResponseType = ApiResponseType.SUCCESS;
-                msg = Constants.DATA_SAVED_MESSAGE;
-            }
-            else
-            {
-                apiResponseType = ApiResponseType.FAILED;
-                msg = Constants.DATA_NOT_SAVED_MESSAGE;
-            }
-
-            return ApiResponse.GetApiResponse(apiResponseType, null, msg);
         }
     }
 }
