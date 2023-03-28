@@ -444,5 +444,91 @@ namespace Reports.Controllers.Reports
                 return await this.GenerateBlankPDF(applicationId.ToString());
             }
         }
+
+
+        [HttpPost(Name = "UpdatePSIDStatus")]
+
+        public async Task<ApiResponse> UpdatePSIDStatus(long epayTaskId, long status)
+        {
+            this.paymentService.VwUser = this.User;
+            var ds = await this.paymentService.UpdatePsidStatus(epayTaskId, status);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows[0][0].ToString() == "1")
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.DATA_NOT_SAVED_MESSAGE);
+            }
+
+            if (status == 2)
+            {
+                if (!await EPayHttpClient.GeneratePSIDRequest(epayTaskId))
+                {
+                    return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.DATA_NOT_SAVED_MESSAGE);
+                }
+            }
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, null, Constants.DATA_SAVED_MESSAGE);
+        }
+
+        [HttpPost]
+        public async Task<ApiResponse> SavePaymentIntimation(VwPayeeIntimation vwPayeeIntimation)
+        {
+            this.paymentService.VwUser = this.User;
+
+            var ds = await this.paymentService.SavePaymentIntimation(vwPayeeIntimation);
+
+            var apiResponseType = ApiResponseType.SUCCESS;
+            var msg = Constants.DATA_SAVED_MESSAGE;
+
+            if (ds.Tables[0].Rows[0][0].ToString() == "0")
+            {
+                apiResponseType = ApiResponseType.SUCCESS;
+                msg = Constants.DATA_SAVED_MESSAGE;
+            }
+            else
+            {
+                apiResponseType = ApiResponseType.FAILED;
+                msg = Constants.DATA_NOT_SAVED_MESSAGE;
+            }
+
+            return ApiResponse.GetApiResponse(apiResponseType, null, msg);
+        }
+
+        [HttpGet(Name = "GetChallanApplications")]
+        public async Task<ApiResponse> GetChallanApplications(long id, DateTime? _appDate)
+        {
+            this.paymentService.VwUser = this.User;
+
+            var ds = await this.paymentService.GetChallanApplications(id, _appDate);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var data = new
+            {
+                psidstatus = ds.Tables[0]
+            };
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, data, Constants.RECORD_FOUND_MESSAGE);
+        }
+
+        [HttpGet(Name = "GetPSIDStatusDropDown")]
+        public async Task<ApiResponse> GetPSIDStatusDropDown()
+        {
+            this.paymentService.VwUser = this.User;
+
+            var ds = await this.paymentService.GetPSIDStatusDropDown();
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var data = new
+            {
+                psidstatus = ds.Tables[0]
+            };
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, data, Constants.RECORD_FOUND_MESSAGE);
+        }
     }
 }
