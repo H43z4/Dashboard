@@ -3,7 +3,7 @@ using Database;
 using SharedLib.Interfaces;
 using System.Data;
 using Models.ViewModels.Payment;
-using Models.DatabaseModels.VehicleRegistration.Core;
+//using Models.DatabaseModels.VehicleRegistration.Core;
 
 namespace Reports.Services
 {

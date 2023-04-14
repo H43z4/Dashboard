@@ -230,5 +230,69 @@ namespace Reports.Controllers
 
             return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, data, Constants.RECORD_FOUND_MESSAGE);
         }
+        [HttpGet(Name = "GetDashboardCounts")]
+        public async Task<ApiResponse> GetDashboardCounts(string startDate, string endDate, int? districtId)
+        {
+            this._service.VwUser = this.User;
+
+            var ds = await this._service.GetDashboardCounts(startDate, endDate, districtId);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var dashboardCount = SharedLib.Common.Extentions.ToList<ImDashboardCounts>(ds.Tables[0]).FirstOrDefault();
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, dashboardCount, Constants.RECORD_FOUND_MESSAGE);
+        }
+        [HttpGet(Name = "GetDashboardTaxCounts")]
+        public async Task<ApiResponse> GetDashboardTaxCounts(string startDate, string endDate, int? districtId)
+        {
+            this._service.VwUser = this.User;
+
+            var ds = await this._service.GetDashboardTaxCounts(startDate, endDate, districtId);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var dashboardTaxCount = SharedLib.Common.Extentions.ToList<ImDashboardTaxCounts>(ds.Tables[0]).FirstOrDefault();
+            if (dashboardTaxCount != null &&  dashboardTaxCount.TOTALAMOUNT != "0")
+            {
+                dashboardTaxCount.TaxTypes = SharedLib.Common.Extentions.ToList<ImDashboardTaxTypesCounts>(ds.Tables[1]);
+            }
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, dashboardTaxCount, Constants.RECORD_FOUND_MESSAGE);
+        }
+        [HttpGet(Name = "GetDashboardMonthlyCounts")]
+        public async Task<ApiResponse> GetDashboardMonthlyCounts(string startDate, string endDate, int? districtId)
+        {
+            this._service.VwUser = this.User;
+
+            var ds = await this._service.GetDashboardMonthlyCounts(startDate, endDate, districtId);
+
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return ApiResponse.GetApiResponse(ApiResponseType.FAILED, null, Constants.NOT_FOUND_MESSAGE);
+            }
+
+            var dashboardCount = SharedLib.Common.Extentions.ToList<ImDashboardCounts>(ds.Tables[0]);
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, dashboardCount, Constants.RECORD_FOUND_MESSAGE);
+        }
+        [HttpGet(Name = "GetDistrictsDropDowns")]
+        public async Task<ApiResponse> GetDistrictsDropDowns()
+        {
+            var ds = await this._service.GetDistrictsDropDowns();
+
+            var data = new
+            {
+                Districts = ds.Tables[0],
+            };
+
+            return ApiResponse.GetApiResponse(ApiResponseType.SUCCESS, data, Constants.RECORD_FOUND_MESSAGE);
+        }
     }
 }

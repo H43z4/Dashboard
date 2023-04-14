@@ -1,4 +1,4 @@
-﻿using Models.DatabaseModels.VehicleRegistration.Core;
+﻿//using Models.DatabaseModels.VehicleRegistration.Core;
 using Models.ViewModels.Identity;
 using Models.ViewModels.VehicleRegistration.Core;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using SharedLib.Interfaces;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using SharedLib.Common;
-using Models.DatabaseModels.VehicleRegistration.Setup;
+//using Models.DatabaseModels.VehicleRegistration.Setup;
 
 namespace Reports.Services
 {

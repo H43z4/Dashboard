@@ -16,6 +16,10 @@ namespace Inquiry.Services
         Task<DataSet> GetApplicationsAgainstRegNo(string registrationNo);
         Task<DataSet> GetApplicationsLogsListAgainstRegNo(long appId);
         Task<DataSet> GetPrintingAgainstRegNo(string registrationNo);
+        Task<DataSet> GetDashboardCounts(string startDate, string endDate, int? districtId);
+        Task<DataSet> GetDashboardTaxCounts(string startDate, string endDate, int? districtId);
+        Task<DataSet> GetDashboardMonthlyCounts(string startDate, string endDate, int? districtId);
+        Task<DataSet> GetDistrictsDropDowns();
         Task<DataSet> GetStatusHistoryAgainstRegNo(string registrationNo);
         Task<DataSet> GetVHLRemarksAgainstRegNo(string registrationNo);
     }
@@ -135,6 +139,46 @@ namespace Inquiry.Services
             paramDict.Add("@VehicleRegNo", registrationNo);
 
             var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetVHLRemarksAgainstVehicle]", paramDict);
+
+            return ds;
+        }
+        public async Task<DataSet> GetDistrictsDropDowns()
+        {
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Setup].[GetDistrictList]", null);
+
+            return ds;
+        }
+        public async Task<DataSet> GetDashboardCounts(string startDate, string endDate, int? districtId)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+
+            paramDict.Add("@DistrictId", districtId == 0 ? null: districtId);
+            paramDict.Add("@StartDate", startDate);
+            paramDict.Add("@EndDate", endDate);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Core].[GetDashboardCounts]", paramDict);
+
+            return ds;
+        }
+        public async Task<DataSet> GetDashboardTaxCounts(string startDate, string endDate, int? districtId)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+
+            paramDict.Add("@DistrictId", districtId == 0 ? null: districtId);
+            paramDict.Add("@StartDate", startDate);
+            paramDict.Add("@EndDate", endDate);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Core].[GetDashboardTaxCounts]", paramDict);
+
+            return ds;
+        }
+        public async Task<DataSet> GetDashboardMonthlyCounts(string startDate, string endDate, int? districtId)
+        {
+            Dictionary<string, object> paramDict = new Dictionary<string, object>();
+
+            paramDict.Add("@DistrictId", districtId == 0 ? null : districtId);
+
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Core].[GetDashboardMonthlyCounts]", paramDict);
 
             return ds;
         }
