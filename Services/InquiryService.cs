@@ -156,7 +156,7 @@ namespace Inquiry.Services
             paramDict.Add("@StartDate", startDate);
             paramDict.Add("@EndDate", endDate);
 
-            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Core].[GetDashboardCounts]", paramDict);
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetDashboardCounts]", paramDict);
 
             return ds;
         }
@@ -168,7 +168,7 @@ namespace Inquiry.Services
             paramDict.Add("@StartDate", startDate);
             paramDict.Add("@EndDate", endDate);
 
-            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Core].[GetDashboardTaxCounts]", paramDict);
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetDashboardTaxCounts]", paramDict);
 
             return ds;
         }
@@ -178,7 +178,7 @@ namespace Inquiry.Services
 
             paramDict.Add("@DistrictId", districtId == 0 ? null : districtId);
 
-            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Core].[GetDashboardMonthlyCounts]", paramDict);
+            var ds = await this.dbHelper.GetDataSetByStoredProcedure("[Reports].[GetDashboardMonthlyCounts]", paramDict);
 
             return ds;
         }
